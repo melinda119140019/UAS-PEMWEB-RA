@@ -8,7 +8,7 @@ a. Login terlebih dahulu.
 b. klik create new site kemudian ketik nama website yang diinginkan di bagian dashboard.
 c. saya membuat nama website saya "uaspemwebmelinda..000webhostapp.com".
 d. kemudian saya membuat password website saya, dan terakhir klik tombol "create".
-e. karena saya memiliki file-file kode saya sendiri di laptop saya, maka saya mengupload semua file yg saya butuhkan dan menempatkannya di folder utama yaitu "public_html" dan membuat file tersendiri yaitu "pemweb".
+e. karena saya memiliki file-file kode saya sendiri di laptop saya, saya klik file manager, lalu saya mengupload semua file yg saya butuhkan kemudian menempatkannya di folder utama yaitu "public_html" dan saya membuat file tersendiri yaitu "pemweb".
    
 3. Pilih penyedia hosting web yang menurut Anda paling cocok untuk aplikasi web
 Anda. Berikan alasan Anda.
