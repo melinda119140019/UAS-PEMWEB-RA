@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Formulir</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <ul class="nav_link">
+        <li><a href="index.html">Kembali ke Beranda</a></li>
+        <li><a href="tabel.html">Tabel Mahasiswa</a></li>
+    </ul>
+    <h1>Formulir Pendataan Mahasiswa</h1>
+    <form id="registrationForm" action="server-side.php" method="post">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" required><br><br>
+
+        <label for="nim">NIM:</label>
+        <input type="text" id="nim" name="nim" required><br><br>
+
+        <label for="prodi">Program Studi:</label>
+        <input type="text" id="prodi" name="prodi" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="jenisKelamin">Jenis Kelamin:</label>
+        <input type="radio" id="lakiLaki" name="jenisKelamin" value="Laki-Laki" required>
+        <label for="lakiLaki">Laki-Laki</label>
+        <input type="radio" id="perempuan" name="jenisKelamin" value="Perempuan" required>
+        <label for="perempuan">Perempuan</label><br><br>
+
+        <label for="tglLahir">Tanggal Lahir:</label>
+        <input type="date" id="tglLahir" name="tglLahir" required><br><br>
+
+        <label for="alamat">Alamat:</label>
+        <textarea id="alamat" name="alamat" required></textarea><br><br>
+
+        <input type="button" value="Daftar" id="daftarButton">
+    </form>
+
+    <!-- Tabel untuk menampilkan data mahasiswa -->
+    <div id="tabelData"></div>
+
+
+     <script>
+        function tambahData() {
+            var nama = document.getElementById("nama").value;
+            var nim = document.getElementById("nim").value;
+            var prodi = document.getElementById("prodi").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            var jenisKelamin;
+            var jenisKelaminRadios = document.getElementsByName("jenisKelamin");
+            for (var i = 0; i < jenisKelaminRadios.length; i++) {
+                if (jenisKelaminRadios[i].checked) {
+                    jenisKelamin = jenisKelaminRadios[i].value;
+                    break;
+                }
+            }
+
+            var tglLahir = document.getElementById("tglLahir").value;
+            var alamat = document.getElementById("alamat").value;
+
+            var manusia = {
+                nama: nama,
+                nim: nim,
+                prodi: prodi,
+                email: email,
+                password: password,
+                jenisKelamin: jenisKelamin,
+                tglLahir: tglLahir,
+                alamat: alamat
+            };
+
+            var manusiaList = JSON.parse(localStorage.getItem("manusiaList")) || [];
+            manusiaList.push(manusia);
+
+            localStorage.setItem("manusiaList", JSON.stringify(manusiaList));
+
+            //reset formulir
+            document.getElementById("nama").value = "";
+            document.getElementById("nim").value = "";
+            document.getElementById("prodi").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("lakiLaki").checked = false;
+            document.getElementById("perempuan").checked = false;
+            document.getElementById("tglLahir").value = "";
+            document.getElementById("alamat").value = "";
+        }
+
+        //Fungsi untuk menghapus data dari tabel
+        function hapusData(index) {
+            var manusiaList = JSON.parse(localStorage.getItem("manusiaList")) || [];
+            manusiaList.splice(index, 1); //Menghapus satu elemen dari array berdasarkan index
+            localStorage.setItem("manusiaList", JSON.stringify(manusiaList));
+            tampilkanData(); //memperbarui tampilan tabel setelah menghapus data
+        }
+
+        //Fungsi untuk menampilkan data ke dalam tabel
+        function tampilkanData() {
+            var manusiaList = JSON.parse(localStorage.getItem("manusiaList")) || [];
+
+            var tabel = "<table>";
+            tabel += "<thead><tr><th>Nama</th><th>NIM</th><th>Program Studi</th><th>Email</th><th>Jenis Kelamin</th><th>Tanggal Lahir</th><th>Alamat</th><th>Aksi</th></tr></thead><tbody>";
+
+            for (var i = 0; i < manusiaList.length; i++) {
+                var manusia = manusiaList[i];
+                tabel += "<tr><td>" + manusia.nama + "</td><td>" + manusia.nim + "</td><td>" + manusia.prodi + "</td><td>" + manusia.email + "</td><td>" + manusia.jenisKelamin + "</td><td>" + manusia.tglLahir + "</td><td>" + manusia.alamat + "</td><td><button onclick='hapusData(" + i + ")'>Hapus</button> <button onclick='editData(" + i + ")'>Edit</button></td></tr>";
+            }
+
+            tabel += "</tbody></table>";
+
+            document.getElementById("tabelData").innerHTML = tabel;
+        }
+
+        //Memanggil fungsi tampilkanData agar tabel menampilkan data saat pertama kali halaman dimuat
+        tampilkanData();
+
+        //Fungsi untuk mengambil data terpilih dari tabel untuk diedit
+        function editData(index) {
+            var manusiaList = JSON.parse(localStorage.getItem("manusiaList")) || [];
+            var manusia = manusiaList[index];
+
+            //isi formulir dengan data yang akan diedit
+            document.getElementById("nama").value = manusia.nama;
+            document.getElementById("nim").value = manusia.nim;
+            document.getElementById("prodi").value = manusia.prodi;
+            document.getElementById("email").value = manusia.email;
+            document.getElementById("password").value = manusia.password;
+            if (manusia.jenisKelamin === "Laki-Laki") {
+                document.getElementById("lakiLaki").checked = true;
+            } else if (manusia.jenisKelamin === "Perempuan") {
+                document.getElementById("perempuan").checked = true;
+            }
+            document.getElementById("tglLahir").value = manusia.tglLahir;
+            document.getElementById("alamat").value = manusia.alamat;
+
+            //Menghapus data yang akan diedit dari penyimpanan lokal
+            manusiaList.splice(index, 1);
+            localStorage.setItem("manusiaList", JSON.stringify(manusiaList));
+
+            //Mengatur focus ke input nama setelah data diedit diambil
+            document.getElementById("nama").focus();
+        }
+
+        //Menambahkan event listener untuk menangani edit data saat tombol Daftar diklik
+        document.getElementById("daftarButton").addEventListener("click", function () {
+            tambahData();
+            //Memperbarui tampilan tabel setelah menambah data
+            tampilkanData();
+        });
+
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Melinda Br Situmorang (119140019) - All Rights Reserved</p>
+    </footer>
+</body>
+</html>
